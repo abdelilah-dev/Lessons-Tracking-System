@@ -1,7 +1,7 @@
 :root {
     --main-blue-color: #0d6efd;
 
-    --main-transition-duration: 0.3s ;
+    --main-transition-duration: 0.3s;
 }
 
 * {
@@ -60,6 +60,7 @@ a {
     justify-content: center;
     color: #555;
     transition: 0.5s;
+    text-decoration: none
 }
 
 .hero-area .container .row .options-icon a:hover {
@@ -250,6 +251,14 @@ a {
     align-items: center;
     justify-content: space-between;
     padding: 10px 0;
+}
+
+.hero-area .row .week .topics>div i {
+    color: var(--main-blue-color);
+}
+
+.hero-area .row .week .topics>div>div {
+    font-size: 14px;
 }
 
 /* End Hero Area  */
