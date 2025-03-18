@@ -5,6 +5,15 @@ import { updateProgress, changeLessonTitle, changeWeeksContent } from './dom.js'
 
 let courseProgress = document.querySelector(".course-progress span");
 let previewBtn = document.querySelector(".previewBtn");
+let topic = document.querySelectorAll(".topic");
+if (topic.length !== 0) {
+    console.log(topic)
+} else {
+    setTimeout(() => {
+        topic = document.querySelectorAll(".topic");
+        console.log(topic);
+    }, 2000);
+}
 
 let userInfo = {};
 userInfo.playListId = "PLDoPjvoNmBAw4eOj58MZPakHjaO3frVMF&si=PNZzKAJuGXbXumwx";
@@ -23,7 +32,6 @@ window.onload = async function () {
     }
     if (window.localStorage.userInfo) {
         userInfo = JSON.parse(window.localStorage.userInfo);
-        console.log(userInfo);
         updateDom();
     }
     else {
@@ -45,7 +53,7 @@ previewBtn.addEventListener("click", event => {
 var player;
 async function onYouTubeIframeAPIReady() {
     player = new YT.Player('player', {
-        height: '390',
+        height: '490',
         width: '100%',
         videoId: await getCurrentVideoId(),
         playerVars: {

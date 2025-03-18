@@ -244,13 +244,15 @@ a {
 
 .hero-area .row .week>p {}
 
-.hero-area .row .week .topics {}
-
-.hero-area .row .week .topics>div {
+.hero-area .row .week .topics .topic {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 10px 0;
+    cursor: pointer;
+}
+.hero-area .row .week .topics .topic.active {
+    color: red;
 }
 
 .hero-area .row .week .topics>div i {

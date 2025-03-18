@@ -13,7 +13,7 @@ export function changeLessonTitle(LessonObject) {
 
 export function changeWeeksContent(totalVideoLessons, playListItems, currentVideo) {
     weeksContent.innerHTML = "";
-    console.log(currentVideo);
+    console.log(playListItems)
     let totlaWeeks = Math.ceil(totalVideoLessons / 7)
     for (let i = 0; i < totlaWeeks; i++) {
         let week = document.createElement("div");
@@ -28,6 +28,8 @@ export function changeWeeksContent(totalVideoLessons, playListItems, currentVide
         topics.className = "topics";
         for (let j = i * 7; j < 7 + i * 7; j++) {
             let div = document.createElement("div");
+            div.className = j <= currentVideo ? "topic active" : "topic";
+            div.setAttribute("videoId", playListItems[j].snippet.resourceId.videoId)
             div.innerHTML = `
                 <div class="${j> currentVideo? "text-black-50": ""}">
                     <i class="fa-solid fa-file-lines"></i>
