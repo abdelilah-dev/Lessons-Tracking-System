@@ -30,11 +30,11 @@ export function changeWeeksContent(totalVideoLessons, playListItems, currentVide
             let div = document.createElement("div");
             div.className = j <= currentVideo ? "topic active" : "topic";
             div.setAttribute("videoId", playListItems[j].snippet.resourceId.videoId)
+            div.setAttribute("videoIndex", j)
             div.innerHTML = `
                 <div class="${j> currentVideo? "text-black-50": ""}">
                     <i class="fa-solid fa-file-lines"></i>
                     ${playListItems[j].snippet.title}
-                    ${j}
                 </div>
                 <i class="${j > currentVideo ? "fa-solid fa-lock": ""}"></i>
             `

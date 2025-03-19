@@ -5,15 +5,8 @@ import { updateProgress, changeLessonTitle, changeWeeksContent } from './dom.js'
 
 let courseProgress = document.querySelector(".course-progress span");
 let previewBtn = document.querySelector(".previewBtn");
-let topic = document.querySelectorAll(".topic");
-if (topic.length !== 0) {
-    console.log(topic)
-} else {
-    setTimeout(() => {
-        topic = document.querySelectorAll(".topic");
-        console.log(topic);
-    }, 2000);
-}
+let nextBtn = document.querySelector(".nextBtn");
+let weeksContent = document.querySelector(".weeks-content");
 
 let userInfo = {};
 userInfo.playListId = "PLDoPjvoNmBAw4eOj58MZPakHjaO3frVMF&si=PNZzKAJuGXbXumwx";
@@ -22,8 +15,7 @@ let userProgress = 1;
 window.onload = async function () {
     if (window['YT'] && window['YT'].Player) {
         onYouTubeIframeAPIReady();
-    }
-    else {
+    } else {
         setTimeout(() => {
             if (window['YT'] && window['YT'].Player) {
                 onYouTubeIframeAPIReady();
@@ -36,9 +28,8 @@ window.onload = async function () {
     }
     else {
         let playlistdata = await fetchPlayList(userInfo.playListId);
-        let videos = playlistdata.items;
         userInfo.currentLessonsVideo = 0;
-        userInfo.totalLessons = videos.length;
+        userInfo.totalLessons = playlistdata.items.length;
         updateDom();
         window.localStorage.setItem("userInfo", JSON.stringify(userInfo))
     }
@@ -50,10 +41,30 @@ previewBtn.addEventListener("click", event => {
     LoadPreviousLesson();
 })
 
+nextBtn.addEventListener("click", event => {
+    event.preventDefault();
+    console.log();
+    if (userInfo.currentLessonsVideo < JSON.parse(window.localStorage.userInfo).currentLessonsVideo) {
+        loadNextLesson();
+        nextBtn.style.color = "#0d6efd";
+    } else {
+        nextBtn.style.color = "red";
+    }
+})
+
+weeksContent.addEventListener("click", async event => {
+    let parentTopicClass = event.target.closest(".topic");
+    if (parentTopicClass && parentTopicClass.classList.contains("active")) {
+        player.loadVideoById(parentTopicClass.getAttribute("videoid"));
+        let playlistdata = await fetchPlayList(userInfo.playListId);
+        changeLessonTitle(playlistdata.items[parentTopicClass.getAttribute("videoindex")]);
+        userInfo.currentLessonsVideo = parentTopicClass.getAttribute("videoindex");
+    }
+})
+
 var player;
 async function onYouTubeIframeAPIReady() {
     player = new YT.Player('player', {
-        height: '490',
         width: '100%',
         videoId: await getCurrentVideoId(),
         playerVars: {
@@ -75,7 +86,7 @@ function onPlayerStateChange(event) {
     }
 }
 
-async function getCurrentVideoId() {
+async function getCurrentVideoId(videoIndex = undefined) {
     let playlistdata = await fetchPlayList(userInfo.playListId);
     let videos = playlistdata.items;
     changeLessonTitle(videos[userInfo.currentLessonsVideo]);
@@ -99,7 +110,12 @@ async function compleatLessonsVideo() {
         }
     }
 }
-
+async function loadNextLesson() {
+    userInfo.currentLessonsVideo++;
+    if (userInfo.currentLessonsVideo < userInfo.totalLessons) {
+        player.loadVideoById(await getCurrentVideoId());
+    }
+}
 async function LoadPreviousLesson() {
     userInfo.currentLessonsVideo--;
     if (userInfo.currentLessonsVideo >= 0) {
