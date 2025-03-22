@@ -1,47 +1,78 @@
 let courseProgress = document.querySelector(".course-progress span");
 let lessonTitle = document.querySelector(".lesson-title");
 let weeksContent = document.querySelector(".weeks-content")
+
+let totalSee = 4;
+
 export function updateProgress(totalVideoLessons, currentVideoNumber) {
     let currentProgress = (100 / totalVideoLessons) * currentVideoNumber;
     courseProgress.setAttribute("prog-value", currentProgress);
     courseProgress.style.width = `${courseProgress.getAttribute("prog-value")}%`;
 }
 
-export function changeLessonTitle(LessonObject) {
-    lessonTitle.innerHTML = LessonObject.snippet.title;
+export function changeLessonTitle(title) {
+    lessonTitle.innerHTML = title;
 }
 
 export function changeWeeksContent(totalVideoLessons, playListItems, currentVideo) {
     weeksContent.innerHTML = "";
     console.log(playListItems)
+    console.log(totalVideoLessons);
+    console.log("create page again")
     let totlaWeeks = Math.ceil(totalVideoLessons / 7)
     for (let i = 0; i < totlaWeeks; i++) {
         let week = document.createElement("div");
-        week.className = `week-${i + 1} week`;
+        week.className = `accordion-item week-${i + 1} week ${i < totalSee ? "active" : ""}`;
         week.innerHTML = `
-                <h4><span></span>
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#flush-collapse${i}" aria-expanded="false" aria-controls="flush-collapseOne">
                     Week ${i + 1}
-                    <span></span>
-                </h4>
-                ` ;
+                </button>
+            </h2>` ;
         let topics = document.createElement("div");
-        topics.className = "topics";
+        topics.className = "accordion-collapse collapse topics";
+        topics.id = `flush-collapse${i}`;
+        topics.setAttribute("data-bs-parent", "#accordionFlushExample")
         for (let j = i * 7; j < 7 + i * 7; j++) {
             let div = document.createElement("div");
-            div.className = j <= currentVideo ? "topic active" : "topic";
+            div.className = "topic accordion-body";
+            if (j <= currentVideo) div.classList.add("active");
             div.setAttribute("videoId", playListItems[j].snippet.resourceId.videoId)
             div.setAttribute("videoIndex", j)
             div.innerHTML = `
-                <div class="${j> currentVideo? "text-black-50": ""}">
+                <div>
                     <i class="fa-solid fa-file-lines"></i>
                     ${playListItems[j].snippet.title}
                 </div>
-                <i class="${j > currentVideo ? "fa-solid fa-lock": ""}"></i>
+                <i class="fa-solid fa-lock"></i>
             `
             topics.appendChild(div);
             if (j === totalVideoLessons - 1) break;
         }
         week.appendChild(topics);
         weeksContent.appendChild(week);
+    }
+    let loadMorebtn = document.createElement("button");
+    loadMorebtn.className = "load-more-btn";
+    loadMorebtn.innerHTML = "Load More";
+    weeksContent.appendChild(loadMorebtn);
+}
+
+export function updateTopics(currentLessonsVideo) {
+    let topic = document.querySelectorAll(".topic");
+    console.log(topic);
+    for (let i = 0; i <= currentLessonsVideo; i++) {
+        console.log(i);
+        topic[i].classList.add("active")
+    }
+}
+
+export function showMoreWeeks(toWeekNumber) {
+    totalSee += toWeekNumber;
+    let week = document.querySelectorAll(".week");
+    console.log(week);
+    for (let i = 0; i < totalSee; i++) {
+        week[i].classList.add("active");
     }
 }

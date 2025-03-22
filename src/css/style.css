@@ -191,10 +191,14 @@ a {
 }
 
 .hero-area .row .week {
-    padding: 20px;
-    box-shadow: 0 0 20px #00000038;
-    margin-bottom: 2rem;
+    padding: 0 15px;
+    box-shadow: 0 0 20px #00000016;
+    margin-bottom: 0.5rem;
     overflow: hidden;
+    display: none;
+}
+.hero-area .row .week.active {
+    display: block;
 }
 
 .hero-area .row .week h4 {
@@ -250,10 +254,14 @@ a {
     justify-content: space-between;
     padding: 10px 0;
     cursor: pointer;
+    color: rgba(0, 0, 0, .5);
 }
 .hero-area .row .week .topics .topic.active {
     /* color: red; */
     color: black;
+}
+.hero-area .row .week .topics .topic.active> i {
+    display: none;
 }
 
 .hero-area .row .week .topics>div i {
