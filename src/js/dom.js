@@ -16,9 +16,6 @@ export function changeLessonTitle(title) {
 
 export function changeWeeksContent(totalVideoLessons, playListItems, currentVideo) {
     weeksContent.innerHTML = "";
-    console.log(playListItems)
-    console.log(totalVideoLessons);
-    console.log("create page again")
     let totlaWeeks = Math.ceil(totalVideoLessons / 7)
     for (let i = 0; i < totlaWeeks; i++) {
         let week = document.createElement("div");
@@ -54,24 +51,21 @@ export function changeWeeksContent(totalVideoLessons, playListItems, currentVide
         weeksContent.appendChild(week);
     }
     let loadMorebtn = document.createElement("button");
-    loadMorebtn.className = "load-more-btn";
-    loadMorebtn.innerHTML = "Load More";
+    loadMorebtn.className = "load-more-btn active";
+    loadMorebtn.appendChild(document.createTextNode("Load More"))
     weeksContent.appendChild(loadMorebtn);
 }
 
 export function updateTopics(currentLessonsVideo) {
     let topic = document.querySelectorAll(".topic");
-    console.log(topic);
     for (let i = 0; i <= currentLessonsVideo; i++) {
-        console.log(i);
         topic[i].classList.add("active")
     }
 }
 
-export function showMoreWeeks(toWeekNumber) {
-    totalSee += toWeekNumber;
+export function showMoreWeeks(toWeekNumber, totalWeeks) {
+    totalSee += totalSee+ toWeekNumber > totalWeeks ? totalWeeks - totalSee : toWeekNumber;
     let week = document.querySelectorAll(".week");
-    console.log(week);
     for (let i = 0; i < totalSee; i++) {
         week[i].classList.add("active");
     }

@@ -197,6 +197,7 @@ a {
     overflow: hidden;
     display: none;
 }
+
 .hero-area .row .week.active {
     display: block;
 }
@@ -256,11 +257,13 @@ a {
     cursor: pointer;
     color: rgba(0, 0, 0, .5);
 }
+
 .hero-area .row .week .topics .topic.active {
     /* color: red; */
     color: black;
 }
-.hero-area .row .week .topics .topic.active> i {
+
+.hero-area .row .week .topics .topic.active>i {
     display: none;
 }
 
@@ -271,5 +274,24 @@ a {
 .hero-area .row .week .topics>div>div {
     font-size: 14px;
 }
+
+.hero-area .row .weeks-content .load-more-btn.active {
+    padding: 7px 20px;
+    border: 1px solid var(--main-blue-color);
+    color: white;
+    background: var(--main-blue-color);
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: bold;
+    margin: 2rem auto;
+}
+
+.hero-area .row .weeks-content .load-more-btn {
+    display: none;
+}
+
 
 /* End Hero Area  */

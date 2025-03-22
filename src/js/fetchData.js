@@ -8,7 +8,6 @@ export async function fetchPlayList(playListId) {
         let data = await response.json();
         if (data.items.length === 0)
             return;
-        console.log(data);
         return data;
     }
     catch (error) {
@@ -26,7 +25,6 @@ export async function fetchMoreVideos(playListId) {
             if (nextPageToken) {
                 url += `&pageToken=${nextPageToken}`
             }
-            console.log(nextPageToken);
             let response = await fetch(url);
             if (!response.ok)
                 throw new Error(`HTTPS ERROR! Status: ${response.status}`);
