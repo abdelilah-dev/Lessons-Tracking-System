@@ -16,6 +16,7 @@ let userInfo = {};
 let playListInto = {};
 userInfo.playListId = "PLDoPjvoNmBAx3kiplQR_oeDqLDBUDYwVv";
 // PLDoPjvoNmBAw4eOj58MZPakHjaO3frVMF&si=PNZzKAJuGXbXumwx
+let userProgress = 1;
 
 window.onload = async function () {
     if (window['YT'] && window['YT'].Player) {
