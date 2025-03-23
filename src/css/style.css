@@ -93,18 +93,13 @@ a {
 
 .hero-area .container .row .course-materials>div {
     padding: 20px 0;
-
 }
 
-.hero-area .container .row .course-materials>div:not(:last-child) {
-    border-bottom: 1px solid #eee;
-
+@media (min-width: 992px) {
+    .hero-area .container .row .course-materials>div>div:first-child .materials-box {
+        border-right: 1px solid;
+    }
 }
-
-.hero-area .container .row .course-materials .materials-box {
-    border-bottom: 1px solid #747373;
-}
-
 
 .hero-area .container .row .course-comments {
     position: relative;
@@ -175,28 +170,40 @@ a {
 }
 
 .hero-area .row .course-progress span::before {
-    content: attr(prog-value)"%";
+    content: attr(prog-value) "%";
     padding: 0 5px;
     background: var(--main-blue-color);
     bottom: 8px;
     position: absolute;
-    right: 0;
+    left: 0px;
     color: white;
     font-weight: bold;
     font-size: 14px;
-    transition: var(--main-blue-color);
     transition: var(--main-transition-duration);
+    animation: up_down_before 1s infinite alternate;
 }
 
 .hero-area .row .course-progress span::after {
     content: "";
     position: absolute;
-    right: 0px;
-    bottom: 0;
+    left: 0px;
+    bottom: 4px;
     border: 5px solid transparent;
     border-top-color: var(--main-blue-color);
-    border-right-color: var(--main-blue-color);
+    border-left-color: var(--main-blue-color);
     transition: var(--main-transition-duration);
+    animation: up_down_after 1s infinite alternate;
+}
+
+@keyframes up_down_before {
+    to {
+        bottom: 14px;
+    }
+}
+@keyframes up_down_after {
+    to {
+        bottom: 10px;
+    }
 }
 
 .hero-area .row .week {
@@ -211,52 +218,13 @@ a {
     display: block;
 }
 
-.hero-area .row .week h4 {
-    width: fit-content;
-    position: relative;
-    margin: auto;
-    padding: 10px;
+.hero-area .row .week .accordion-button:focus {
+    z-index: 3;
+    outline: 0;
+    box-shadow: none;
 }
 
-.hero-area .row .week h4::after,
-.hero-area .row .week h4::before {
-    content: "";
-    width: 3px;
-    height: 70%;
-    display: block;
-    background: var(--main-blue-color);
-    top: 50%;
-    position: absolute;
-    transform: translateY(-50%);
-}
-
-.hero-area .row .week h4::after {
-    right: 0px;
-}
-
-.hero-area .row .week h4::before {
-    left: 0px;
-}
-
-.hero-area .row .week h4 span {
-    width: 100%;
-    height: 4px;
-    display: block;
-    background: var(--main-blue-color);
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-.hero-area .row .week h4 span:first-child {
-    left: -100%;
-}
-
-.hero-area .row .week h4 span:last-child {
-    right: -100%;
-}
-
-.hero-area .row .week>p {}
+    {}
 
 .hero-area .row .week .topics .topic {
     display: flex;
