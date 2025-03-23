@@ -31,7 +31,7 @@ window.onload = async function () {
     }
     else {
         let playlistdata = await fetchPlayList(userInfo.playListId);
-        userInfo.currentLessonsVideo = 0;
+        userInfo.currentLessonsVideo = 1;
         userInfo.totalLessons = playlistdata.items.length;
         userInfo.nextPageToken = playlistdata.nextPageToken || null;
         userInfo.allLessonId = [...playlistdata.items].map((ele) => ele.snippet.resourceId.videoId);
