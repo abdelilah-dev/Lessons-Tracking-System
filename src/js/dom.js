@@ -69,7 +69,6 @@ export function courseMaterials(totalVideos, studentsCount, lang) {
 }
 
 export function updateTopics(lessonOpened, currentLessonsVideo = null) {
-    console.log("after loading data");
     let topic = document.querySelectorAll(".topic");
     topic.forEach(ele => {
         if (ele === topic[lessonOpened]) {
@@ -82,7 +81,7 @@ export function updateTopics(lessonOpened, currentLessonsVideo = null) {
         else ele.classList.remove("open")
     })
     topic[lessonOpened].classList.add("open")
-    if (currentLessonsVideo) {
+    if (currentLessonsVideo != null) {
         for (let i = 0; i <= currentLessonsVideo; i++) {
             topic[i].classList.add("active")
         }
