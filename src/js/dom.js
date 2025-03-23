@@ -6,7 +6,7 @@ let totalSee = 4;
 
 export function updateProgress(totalVideoLessons, currentVideoNumber) {
     let currentProgress = (100 / totalVideoLessons) * currentVideoNumber;
-    courseProgress.setAttribute("prog-value", currentProgress);
+    courseProgress.setAttribute("prog-value", currentProgress.toFixed(1));
     courseProgress.style.width = `${courseProgress.getAttribute("prog-value")}%`;
 }
 
@@ -16,6 +16,7 @@ export function changeLessonTitle(title) {
 
 export function changeWeeksContent(totalVideoLessons, playListItems, currentVideo) {
     weeksContent.innerHTML = "";
+    totalSee = Math.ceil(currentVideo / 7) > 4 ? Math.ceil(currentVideo / 7) : 4;
     let totlaWeeks = Math.ceil(totalVideoLessons / 7)
     for (let i = 0; i < totlaWeeks; i++) {
         let week = document.createElement("div");
@@ -34,7 +35,6 @@ export function changeWeeksContent(totalVideoLessons, playListItems, currentVide
         for (let j = i * 7; j < 7 + i * 7; j++) {
             let div = document.createElement("div");
             div.className = "topic accordion-body";
-            if (j <= currentVideo) div.classList.add("active");
             div.setAttribute("videoId", playListItems[j].snippet.resourceId.videoId)
             div.setAttribute("videoIndex", j)
             div.innerHTML = `
@@ -54,17 +54,44 @@ export function changeWeeksContent(totalVideoLessons, playListItems, currentVide
     loadMorebtn.className = "load-more-btn active";
     loadMorebtn.appendChild(document.createTextNode("Load More"))
     weeksContent.appendChild(loadMorebtn);
+    updateTopics(currentVideo, currentVideo);
 }
 
-export function updateTopics(currentLessonsVideo) {
+export function courseMaterials(totalVideos, studentsCount, lang) {
+    let duration = document.querySelector(".duration-value")
+    let lessons = document.querySelector(".lesson-count")
+    let enrolled = document.querySelector(".enrolled-value")
+    let language = document.querySelector(".language")
+    duration.innerHTML = `${Math.ceil(totalVideos / 7)} Weeks`
+    lessons.innerHTML = `${totalVideos}`;
+    enrolled.innerHTML = `${studentsCount} Student`;
+    language.innerHTML = lang;
+}
+
+export function updateTopics(lessonOpened, currentLessonsVideo = null) {
+    console.log("after loading data");
     let topic = document.querySelectorAll(".topic");
-    for (let i = 0; i <= currentLessonsVideo; i++) {
-        topic[i].classList.add("active")
+    topic.forEach(ele => {
+        if (ele === topic[lessonOpened]) {
+            let weekParent = ele.closest(".week");
+            weekParent.classList.contains(".active") ? null : weekParent.classList.add("active");
+            let btn = ele.closest(".week").children[0].children[0];
+            if (btn.getAttribute("aria-expanded") === "false") btn.click();
+            ele.classList.add("open")
+        }
+        else ele.classList.remove("open")
+    })
+    topic[lessonOpened].classList.add("open")
+    if (currentLessonsVideo) {
+        for (let i = 0; i <= currentLessonsVideo; i++) {
+            topic[i].classList.add("active")
+        }
     }
+
 }
 
 export function showMoreWeeks(toWeekNumber, totalWeeks) {
-    totalSee += totalSee+ toWeekNumber > totalWeeks ? totalWeeks - totalSee : toWeekNumber;
+    totalSee += totalSee + toWeekNumber > totalWeeks ? totalWeeks - totalSee : toWeekNumber;
     let week = document.querySelectorAll(".week");
     for (let i = 0; i < totalSee; i++) {
         week[i].classList.add("active");

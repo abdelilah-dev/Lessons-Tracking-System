@@ -8,6 +8,7 @@ export async function fetchPlayList(playListId) {
         let data = await response.json();
         if (data.items.length === 0)
             return;
+        console.log(data);
         return data;
     }
     catch (error) {

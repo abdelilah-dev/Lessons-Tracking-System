@@ -4,7 +4,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 // import '@fortawesome/fontawesome-free/js/all.min.js';
 import { fetchPlayList, fetchMoreVideos } from './fetchData.js';
-import { updateProgress, changeLessonTitle, changeWeeksContent, updateTopics, showMoreWeeks } from './dom.js';
+import { updateProgress, changeLessonTitle, changeWeeksContent, updateTopics, showMoreWeeks, courseMaterials } from './dom.js';
 
 let previewBtn = document.querySelector(".previewBtn");
 let nextBtn = document.querySelector(".nextBtn");
@@ -24,7 +24,10 @@ window.onload = async function () {
     }
     if (window.localStorage.userInfo) {
         userInfo = JSON.parse(window.localStorage.userInfo);
-        updateDom();
+        if (Object.values(userInfo).length < 7) {
+            window.localStorage.clear();
+            window.location.reload()
+        }
     }
     else {
         let playlistdata = await fetchPlayList(userInfo.playListId);
@@ -34,7 +37,6 @@ window.onload = async function () {
         userInfo.allLessonId = [...playlistdata.items].map((ele) => ele.snippet.resourceId.videoId);
         userInfo.totalVideos = playlistdata.pageInfo.totalResults;
         userInfo.allLessonsTitle = [...playlistdata.items].map((ele) => ele.snippet.title);
-        updateDom();
         window.localStorage.setItem("userInfo", JSON.stringify(userInfo))
     }
     updateDom();
@@ -61,6 +63,7 @@ weeksContent.addEventListener("click", async event => {
         player.loadVideoById(parentTopicClass.getAttribute("videoid"));
         changeLessonTitle(userInfo.allLessonsTitle[parentTopicClass.getAttribute("videoindex")]);
         userInfo.currentLessonsVideo = parentTopicClass.getAttribute("videoindex");
+        updateTopics(userInfo.currentLessonsVideo);
     }
     if (event.target.classList.contains("load-more-btn")) {
         showMoreWeeks(4, Math.ceil(userInfo.totalVideos / 7));
@@ -73,7 +76,9 @@ weeksContent.addEventListener("click", async event => {
 
 var player;
 async function onYouTubeIframeAPIReady() {
+    let playerContainer = document.querySelector(".player-container");
     player = new YT.Player('player', {
+        height: `${playerContainer.clientWidth * 9 / 16}`,
         width: '100%',
         videoId: await getCurrentVideoId(),
         playerVars: {
@@ -83,6 +88,9 @@ async function onYouTubeIframeAPIReady() {
             'onReady': onPlayerReady,
             'onStateChange': onPlayerStateChange
         }
+    });
+    window.addEventListener("resize", () => {
+        player.setSize(playerContainer.clientWidth, playerContainer.clientWidth * 9 / 16);
     });
 }
 function onPlayerReady(event) {
@@ -122,12 +130,14 @@ async function loadNextLesson() {
     userInfo.currentLessonsVideo++;
     if (userInfo.currentLessonsVideo < userInfo.totalLessons) {
         player.loadVideoById(await getCurrentVideoId());
+        updateTopics(userInfo.currentLessonsVideo, userInfo.currentLessonsVideo);
     }
 }
 async function LoadPreviousLesson() {
     userInfo.currentLessonsVideo--;
     if (userInfo.currentLessonsVideo >= 0) {
         player.loadVideoById(await getCurrentVideoId())
+        updateTopics(userInfo.currentLessonsVideo, userInfo.currentLessonsVideo);
     }
 }
 
@@ -140,7 +150,8 @@ async function updateDom(createAgain = true) {
     if (createAgain) {
         changeWeeksContent(userInfo.totalVideos, allvideoslist, userInfo.currentLessonsVideo);
     } else {
-        updateTopics(userInfo.currentLessonsVideo);
+        updateTopics(userInfo.currentLessonsVideo, userInfo.currentLessonsVideo);
     }
-    updateProgress(userInfo.totalLessons, userInfo.currentLessonsVideo + 1);
+    updateProgress(userInfo.totalVideos, userInfo.currentLessonsVideo + 1);
+    courseMaterials(userInfo.totalVideos, "202K", "Arabic")
 }
