@@ -96,3 +96,36 @@ export function showMoreWeeks(toWeekNumber, totalWeeks) {
         week[i].classList.add("active");
     }
 }
+
+export function updateComment(allComments) {
+    let commentSection = document.querySelector(".comment-content")
+    commentSection.innerHTML = "";
+    for (let i = allComments.length - 1; i >= 0; i--) {
+        let allStars = "";
+        for (let j = 0; j < 5; j++) {
+            allStars += `<a class="star ${j < allComments[i].stars ? "active" : ""}" href=""><i class="fa-solid fa-star"></i></a>`
+        }
+        let div = document.createElement("div");
+        div.className = `${i >= allComments.length - 3 ? "active" : "deactive"} user-comment mb-3 row w-100`;
+        div.setAttribute("data-id", allComments[i].id)
+        div.innerHTML = `
+            <div class="user-pic col-lg-2 col-sm-3 col-4 d-flex align-items-start justify-content-center">
+                <img src="${allComments[i].profileImg}" class="w-80" alt="">
+            </div>
+            <div class="user-info col-lg-10 col-sm-9 col-8">
+                <div>
+                    <span class="fw-bold">${allComments[i].name}</span>
+                    <span class="text-black-50">
+                        ${allComments[i].date}
+                        <a href="" class="delete-comment"><i class="fa-solid fa-trash"></i></a>
+                    </span>
+                </div>
+                <div class="user-stars">
+                    ${allStars}
+                </div>
+                <p class="text-black-50">${allComments[i].content}</p>
+            </div>
+        `
+        commentSection.appendChild(div);
+    }
+}

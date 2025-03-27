@@ -116,13 +116,47 @@ a {
     border-bottom: 1px solid #eee;
 }
 
+.hero-area .container .row .course-comments .user-comment.active {
+    display: flex;
+}
+
+.hero-area .container .row .course-comments .user-comment.deactive {
+    display: none;
+}
+
 .hero-area .container .row .course-comments .user-pic img {
     border-radius: 50%;
+}
+
+.hero-area .row .course-comments .user-comment .user-info>div:first-child {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.hero-area .row .course-comments .user-comment .user-info>div:nth-child(2) {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 12px;
+}
+
+.hero-area .row .course-comments .user-comment .user-info>div:nth-child(2) a {
+    color: #5555;
+}
+
+.hero-area .row .course-comments .user-comment .user-info>div:nth-child(2) a.active {
+    color: rgb(255, 166, 0);
 }
 
 .hero-area .row .course-comments .user-comment .user-info span {
     margin-bottom: 0.5rem;
     display: block;
+}
+
+.hero-area .row .course-comments .user-comment .user-info span a {
+    color: red;
+    margin-left: 5px;
 }
 
 
@@ -137,6 +171,17 @@ a {
     margin: 2rem 0;
 }
 
+.hero-area .row .course-comments form .stars-input a {
+    font-size: 24px;
+    color: #5555;
+    transition: var(--main-transition-duration);
+}
+
+.hero-area .row .course-comments form .stars-input a.hovering,
+.hero-area .row .course-comments form .stars-input a.selected {
+    color: rgb(255, 166, 0);
+}
+
 .hero-area .row .course-comments form button {
     padding: 10px 15px;
     border-radius: 12px;
@@ -146,6 +191,8 @@ a {
     color: white;
     font-weight: bold;
     font-size: 18px;
+    margin: auto;
+    display: block;
 }
 
 .hero-area .row .course-comments form button a {
@@ -200,6 +247,7 @@ a {
         bottom: 14px;
     }
 }
+
 @keyframes up_down_after {
     to {
         bottom: 10px;
@@ -223,8 +271,6 @@ a {
     outline: 0;
     box-shadow: none;
 }
-
-    {}
 
 .hero-area .row .week .topics .topic {
     display: flex;

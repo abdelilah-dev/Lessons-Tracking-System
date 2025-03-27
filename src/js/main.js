@@ -4,14 +4,19 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 // import '@fortawesome/fontawesome-free/js/all.min.js';
 import { fetchPlayList, fetchMoreVideos } from './fetchData.js';
-import { updateProgress, changeLessonTitle, changeWeeksContent, updateTopics, showMoreWeeks, courseMaterials } from './dom.js';
-
+import { updateProgress, changeLessonTitle, changeWeeksContent, updateTopics, showMoreWeeks, courseMaterials, updateComment } from './dom.js';
 let previewBtn = document.querySelector(".previewBtn");
 let nextBtn = document.querySelector(".nextBtn");
 let weeksContent = document.querySelector(".weeks-content");
+let commentInput = document.querySelector(".comment-input");
+let commentContent = document.querySelector(".comment-content");
+let addCommentBtn = document.querySelector(".add-comment");
+let allStars = document.querySelectorAll(".star");
 
 let userInfo = {};
+let userComment = [];
 userInfo.playListId = "PLDoPjvoNmBAx3kiplQR_oeDqLDBUDYwVv";
+let totalStarSelected = 0;
 // PLDoPjvoNmBAw4eOj58MZPakHjaO3frVMF&si=PNZzKAJuGXbXumwx
 
 window.onload = async function () {
@@ -38,6 +43,14 @@ window.onload = async function () {
         userInfo.totalVideos = playlistdata.pageInfo.totalResults;
         userInfo.allLessonsTitle = [...playlistdata.items].map((ele) => ele.snippet.title);
         window.localStorage.setItem("userInfo", JSON.stringify(userInfo))
+    }
+    if (window.localStorage.userComment) {
+        userComment = JSON.parse(window.localStorage.userComment);
+        getDefaultComments();
+        updateComment(userComment);
+    } else {
+        getDefaultComments();
+        updateComment(userComment);
     }
     updateDom();
 };
@@ -73,6 +86,82 @@ weeksContent.addEventListener("click", async event => {
         }
     }
 })
+commentContent.addEventListener('click', event => {
+    event.preventDefault();
+    let deletbtn = event.target.closest(".delete-comment")
+    if (deletbtn) {
+        let parentComment = event.target.closest(".user-comment")
+        userComment = userComment.filter((ele) => ele.id !== +parentComment.getAttribute("data-id"));
+        updateComment(userComment);
+        window.localStorage.setItem("userComment", userComment);
+
+    }
+})
+addCommentBtn.onclick = function (e) {
+    allStars.forEach((ele) => {
+        ele.classList.remove("selected")
+    })
+    let date = new Date();
+    if (commentInput.value != "") {
+        userComment.push({
+            name: "You",
+            content: commentInput.value,
+            date: `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`,
+            stars: totalStarSelected,
+            id: randomId(),
+            profileImg: "/image/comment-01.jpg"
+        })
+        commentInput.value = "";
+        window.localStorage.setItem("userComment", JSON.stringify(userComment));
+        updateComment(userComment);
+        totalStarSelected = 0;
+    } else {
+        window.alert("The Comment is Empty! please fill it :)");
+    }
+    e.preventDefault();
+}
+
+allStars.forEach((ele, index) => {
+    ele.addEventListener("click", (event) => {
+        event.preventDefault();
+        allStars.forEach(e => {
+            e.classList.remove("selected")
+        });
+        for (let i = 0; i <= index; i++) {
+            allStars[i].classList.add("selected")
+        }
+        totalStarSelected = index + 1;
+    })
+    ele.addEventListener("mouseover", (e) => {
+        for (let i = 0; i <= index; i++) {
+            allStars[i].classList.add("hovering")
+        }
+    })
+    ele.addEventListener("mouseout", (e) => {
+        for (let i = 0; i <= index; i++) {
+            allStars[i].classList.remove("hovering")
+        }
+    })
+})
+
+function getDefaultComments() {
+    userComment.unshift({
+        name: "Student Name",
+        content: "Lorem ipsum, dolor sit amet consectetur adipisicing elit Id atque ipsa pariatur unde libero dolore accusantium iure suscipit vero fugiat neque",
+        date: `28-2-2025`,
+        stars: 4,
+        id: randomId(),
+        profileImg: "/image/comment-01.jpg"
+    })
+    userComment.unshift({
+        name: "Student Name",
+        content: "Lorem ipsum, dolor sit amet consectetur adipisicing elit Id atque ipsa pariatur unde libero dolore accusantium iure suscipit vero fugiat neque",
+        date: `5-11-2024`,
+        stars: 5,
+        id: randomId(),
+        profileImg: "/image/comment-02.jpg",
+    })
+}
 
 var player;
 async function onYouTubeIframeAPIReady() {
@@ -105,8 +194,8 @@ function onPlayerStateChange(event) {
 
 async function getCurrentVideoId(videoIndex = undefined) {
     let playlistdata = await fetchPlayList(userInfo.playListId);
-    changeLessonTitle(playlistdata.items[userInfo.currentLessonsVideo].snippet.title);
-    return playlistdata.items[userInfo.currentLessonsVideo].snippet.resourceId.videoId;
+    changeLessonTitle(playlistdata.items[userInfo.currentLessonsVideo || 0].snippet.title);
+    return playlistdata.items[userInfo.currentLessonsVideo || 0].snippet.resourceId.videoId;
 }
 
 async function compleatLessonsVideo() {
@@ -154,4 +243,9 @@ async function updateDom(createAgain = true) {
     }
     updateProgress(userInfo.totalVideos, userInfo.currentLessonsVideo + 1);
     courseMaterials(userInfo.totalVideos, "202K", "Arabic")
+}
+
+function randomId(min = 100, max = 999) {
+    return Math.floor(Math.random() * (max - min) + min)
+
 }
