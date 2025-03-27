@@ -73,6 +73,7 @@ nextBtn.addEventListener("click", event => {
 weeksContent.addEventListener("click", async event => {
     let parentTopicClass = event.target.closest(".topic");
     if (parentTopicClass && parentTopicClass.classList.contains("active")) {
+        window.scrollTo(0, 0)
         player.loadVideoById(parentTopicClass.getAttribute("videoid"));
         changeLessonTitle(userInfo.allLessonsTitle[parentTopicClass.getAttribute("videoindex")]);
         userInfo.currentLessonsVideo = parentTopicClass.getAttribute("videoindex");
