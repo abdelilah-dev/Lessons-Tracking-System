@@ -94,7 +94,7 @@ commentContent.addEventListener('click', event => {
         let parentComment = event.target.closest(".user-comment")
         userComment = userComment.filter((ele) => ele.id !== +parentComment.getAttribute("data-id"));
         updateComment(userComment);
-        window.localStorage.setItem("userComment", userComment);
+        window.localStorage.setItem("userComment", JSON.stringify(userComment));
 
     }
 })
